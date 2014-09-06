@@ -15,6 +15,10 @@ Game::~Game()
     {
         delete tw_factory;
     }
+    if (displayManager)
+    {
+        delete displayManager;
+    }
 }
 
 void Game::init()
@@ -27,14 +31,17 @@ void Game::init()
 void Game::initUI()
 {
     termSize = sf::Vector2i(51, 51);
-    cellSize = sf::Vector2i(16, 16);
-    screenSize = sf::Vector2i(termSize.x * cellSize.x, termSize.y * cellSize.y);
+    coreCellSize = sf::Vector2i(8, 8);
+    screenMultiplier = 2;
+    screenSize = sf::Vector2i(screenMultiplier * termSize.x * coreCellSize.x, screenMultiplier * termSize.y * coreCellSize.y);
 
     renderWindow = new sf::RenderWindow(sf::VideoMode(screenSize.x, screenSize.y), Title);
     renderWindow->setFramerateLimit(framerate);
 
     tw_factory = new zf::TiledWindowFactory();
     tw_factory->init(32);
+
+    displayManager = new DisplayManager(*this, *tw_factory);
 }
 
 void Game::initAssets()

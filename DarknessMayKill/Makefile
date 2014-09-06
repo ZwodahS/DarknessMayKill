@@ -15,6 +15,8 @@ vpath %.cpp zf/
 vpath %.hpp zf/
 vpath %.cpp game/
 vpath %.hpp game/
+vpath %.cpp game/ui
+vpath %.hpp game/ui
 
 vpath %.o $(OBJDIR)/
 

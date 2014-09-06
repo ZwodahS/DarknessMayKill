@@ -10,6 +10,7 @@
 
 #include "Logger.hpp"
 #include "KeyMap.hpp"
+#include "ui/DisplayManager.hpp"
 /**
  * Game should hold all the global variable.
  */
@@ -31,19 +32,11 @@ public:
 
     const sf::Vector2i& getScreenSize() const;
 private:
-    void initUI();
-    void update(const sf::Time& delta);
-    void draw(const sf::Time& delta);
-
-    
     sf::Vector2i screenSize;
-    sf::Vector2i cellSize;
+    sf::Vector2i coreCellSize;
     sf::Vector2i termSize;
+    int screenMultiplier;
     int framerate;
-    
-    sf::RenderWindow* renderWindow;
-    zf::TiledWindowFactory* tw_factory;
-    zf::TiledWindow* window;
 //////////////////// Assets ////////////////////
 public:
     
@@ -60,5 +53,15 @@ public:
 private:
     void initKeys();
     std::vector<int> inputs;
+//////////////////// UI ////////////////////
+public:
+    void initUI();
+    void update(const sf::Time& delta);
+    void draw(const sf::Time& delta);
+private:
+    sf::RenderWindow* renderWindow;
+    zf::TiledWindowFactory* tw_factory;
+    zf::TiledWindow* window;
+    DisplayManager* displayManager;
 };
 #endif

@@ -287,9 +287,6 @@ namespace zf
         TextureRegion getChar(char c) const;
 
         bool addSpecialCharImage(int c, const sf::Image& image);
-        /** 
-         * return -1 if fail
-         */
         TextureRegion getSpecialChar(int c) const;
 
         void bringToFront(TermWindow& window);

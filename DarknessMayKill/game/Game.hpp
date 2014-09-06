@@ -9,6 +9,7 @@
 #include "../zf/zf_twindow.hpp"
 
 #include "Logger.hpp"
+#include "KeyMap.hpp"
 /**
  * Game should hold all the global variable.
  */
@@ -42,6 +43,7 @@ private:
     
     sf::RenderWindow* renderWindow;
     zf::TiledWindowFactory* tw_factory;
+    zf::TiledWindow* window;
 //////////////////// Assets ////////////////////
 public:
     
@@ -52,5 +54,11 @@ public:
     Logger& getLogger();
 private:
     Logger logger;
+//////////////////// KeyMapping ////////////////////
+public:
+    KeyMap keyMap;
+private:
+    void initKeys();
+    std::vector<int> inputs;
 };
 #endif

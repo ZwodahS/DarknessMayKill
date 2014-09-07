@@ -267,9 +267,9 @@ namespace zf
         return windowSize;
     }
     
-    sf::IntRect TiledWindow::getRenderSize() const
+    sf::FloatRect TiledWindow::getRenderSize() const
     {
-        return sf::IntRect(windowPosition.x, windowPosition.y, windowSize.x * cellSize, windowSize.y * cellSize);
+        return sf::FloatRect(windowPosition.x, windowPosition.y, windowSize.x * cellSize, windowSize.y * cellSize);
     }
 
     bool TiledWindow::inRange(int x, int y) const
@@ -312,6 +312,19 @@ namespace zf
     TiledWindow& TiledWindow::moveWindow(const sf::Vector2f& moveVec)
     {
         windowPosition += moveVec;
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::setWindowPosition(const sf::Vector2f& position)
+    {
+        windowPosition = position;
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::setWindowPosition(int x, int y)
+    {
+        windowPosition.x = x;
+        windowPosition.y = y;
         return *this;
     }
 

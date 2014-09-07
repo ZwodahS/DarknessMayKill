@@ -52,7 +52,7 @@ public:
      * Draw all display object
      * @param time passed since last draw.
      */
-    void drawAll(const sf::Time& delta);
+    void drawAll(sf::RenderWindow& window, const sf::Time& delta);
     /**
      * Put a display object into the "stack"
      * @param the state object.
@@ -64,7 +64,7 @@ public:
      * @param data use to init the object.
      * @return the display object created or nullptr if the display fails to create.
      */
-    DisplayObject* makeDisplayObject(const std::string& type, const DisplayData& data);
+    DisplayObject* makeDisplayObject(const std::string& type, DisplayData* data);
     /**
      * Get the list of DisplayObject.
      * @return const ref list of the internal display stack.

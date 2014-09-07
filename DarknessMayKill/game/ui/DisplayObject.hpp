@@ -57,7 +57,7 @@ public:
      * Get the string type of this display object.
      * @return type of the display object.
      */
-    virtual std::string getType() = 0;
+    virtual std::string getType() const = 0;
     /**
      * Process this key.
      * @param key
@@ -77,8 +77,9 @@ public:
     virtual void update(const sf::Time& delta) = 0;
     /**
      * Update this display.
+     * @param the renderwindow to draw to
      * @param time passed since last draw.
      */
-    virtual void draw(const sf::Time& delta) = 0;
+    virtual void draw(sf::RenderWindow& window, const sf::Time& delta) = 0;
 };
 #endif

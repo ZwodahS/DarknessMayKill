@@ -4,7 +4,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include <boost/format.hpp>
 
 #include "../zf/zf_twindow.hpp"
 
@@ -64,7 +63,6 @@ public:
 private:
     sf::RenderWindow* renderWindow;
     zf::TiledWindowFactory* tw_factory;
-    zf::TiledWindow* window;
     DisplayManager* displayManager;
 };
 #endif

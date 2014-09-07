@@ -23,6 +23,7 @@
 #include "DisplayManager.hpp"
 #include "DisplayObject.hpp"
 #include "DisplayData.hpp"
+#include "RootObject.hpp"
 DisplayManager::DisplayManager(Game& game, zf::TiledWindowFactory& factory)
     : game(game), windowFactory(factory)
 {
@@ -69,11 +70,11 @@ void DisplayManager::updateAll(const sf::Time& delta)
     }
 }
 
-void DisplayManager::drawAll(const sf::Time& delta)
+void DisplayManager::drawAll(sf::RenderWindow& window, const sf::Time& delta)
 {
     for (auto it = stack.begin(); it != stack.end(); it++)
     {
-        (**it).draw(delta);
+        (**it).draw(window, delta);
     }
 }
 
@@ -85,4 +86,19 @@ void DisplayManager::putDisplay(DisplayObject& object)
 bool DisplayManager::empty() const
 {
     return stack.size() == 0;
+}
+
+DisplayObject* DisplayManager::makeDisplayObject(const std::string& type, DisplayData* data)
+{
+    if (type == RootObject::Type)
+    {
+        auto object = new RootObject(*this);
+        if (!object->init(data))
+        {
+            delete object;
+            return nullptr;
+        }
+        return object;
+    }
+    return nullptr;
 }

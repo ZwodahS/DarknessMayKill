@@ -228,7 +228,7 @@ namespace zf
          * @return sf::Vector2i, number of columns in the x value, number of rows in the y value.
          */
         const sf::Vector2i& getWindowSize() const;
-        sf::IntRect getRenderSize() const;
+        sf::FloatRect getRenderSize() const;
         /**
          * Check if this position is in range of the window.
          * @return true if the position is in the window.
@@ -239,6 +239,8 @@ namespace zf
          * Move the window by a certain vector.
          */
         TiledWindow& moveWindow(const sf::Vector2f& moveVec);
+        TiledWindow& setWindowPosition(const sf::Vector2f& position);
+        TiledWindow& setWindowPosition(int x, int y);
         /**
          * Get the texture region representing this character, and scale it properly for this window.
          * Scaling done using the scaling version in window.

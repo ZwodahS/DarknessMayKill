@@ -1,5 +1,5 @@
 #include "Game.hpp"
-
+#include "ui/RootObject.hpp"
 Game::Game()
     : renderWindow(nullptr), tw_factory(nullptr), framerate(30)
 {
@@ -65,9 +65,13 @@ void Game::run()
 {
     bool quit(false);
     sf::Clock clock;
-
-    window = tw_factory->newWindow(sf::Vector2i(10, 3), 8);
-    window->drawEdgeBorder();
+    auto object = displayManager->makeDisplayObject(RootObject::Type, nullptr);
+    if (!object)
+    {
+        logger.error("Fail to initialize");
+        return;
+    }
+    displayManager->putDisplay(*object);
 
     while (!quit && renderWindow->isOpen())
     {
@@ -85,9 +89,11 @@ void Game::run()
                 // strictly only handles ascii character
                 if (event.text.unicode >= 32 && event.text.unicode <= 126)
                 {
+                    inputs.push_back(event.text.unicode);
                 }
                 else if (event.text.unicode == 10)
                 {
+                    inputs.push_back(event.text.unicode);
                 }
             }
             else if(event.type == sf::Event::KeyPressed)
@@ -143,34 +149,20 @@ void Game::update(const sf::Time& delta)
 {
     for (auto key : inputs)
     {
-        auto action = keyMap.getMapping(key);
-        if (action == Action::G_Up)
-        {
-            window->moveWindow(sf::Vector2f(0, -16));
-        }
-        else if (action == Action::G_Down)
-        {
-            window->moveWindow(sf::Vector2f(0, 16));
-        }
-        else if (action == Action::G_Left)
-        {
-            window->moveWindow(sf::Vector2f(-16, 0));
-        }
-        else if (action == Action::G_Right)
-        {
-            window->moveWindow(sf::Vector2f(16, 0));
-        }
+        displayManager->processKey(key);
     }
+    displayManager->updateAll(delta);
     inputs.clear();
 }
 
 void Game::draw(const sf::Time& delta)
 {
     renderWindow->clear(sf::Color(20, 20, 20));
-    window->clean();
-    window->drawEdgeBorder();
-    std::string fps = zf::floatToString(1/delta.asSeconds(), 2);
-    window->putString(1, 1, fps);
-    window->draw(*renderWindow);
+    displayManager->drawAll(*renderWindow, delta);
     renderWindow->display();
+}
+
+Logger& Game::getLogger()
+{
+    return logger;
 }

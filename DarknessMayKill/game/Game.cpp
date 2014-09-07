@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 Game::Game()
-    : renderWindow(nullptr), tw_factory(nullptr)
+    : renderWindow(nullptr), tw_factory(nullptr), framerate(30)
 {
 }
 
@@ -30,10 +30,10 @@ void Game::init()
 
 void Game::initUI()
 {
-    termSize = sf::Vector2i(51, 51);
+    coreTermSize = sf::Vector2i(51, 51);
     coreCellSize = sf::Vector2i(8, 8);
     screenMultiplier = 2;
-    screenSize = sf::Vector2i(screenMultiplier * termSize.x * coreCellSize.x, screenMultiplier * termSize.y * coreCellSize.y);
+    screenSize = sf::Vector2i(screenMultiplier * coreTermSize.x * coreCellSize.x, screenMultiplier * coreTermSize.y * coreCellSize.y);
 
     renderWindow = new sf::RenderWindow(sf::VideoMode(screenSize.x, screenSize.y), Title);
     renderWindow->setFramerateLimit(framerate);
@@ -66,7 +66,7 @@ void Game::run()
     bool quit(false);
     sf::Clock clock;
 
-    window = tw_factory->newWindow(sf::Vector2i(10, 10), 32);
+    window = tw_factory->newWindow(sf::Vector2i(10, 3), 8);
     window->drawEdgeBorder();
 
     while (!quit && renderWindow->isOpen())
@@ -124,6 +124,21 @@ const sf::Vector2i& Game::getScreenSize() const
     return screenSize;
 }
 
+const sf::Vector2i& Game::getCoreTermSize() const
+{
+    return coreTermSize;
+}
+
+const sf::Vector2i& Game::getCoreCellSize() const
+{
+    return coreCellSize;
+}
+
+int Game::getScreenSizeMultiplier() const
+{
+    return screenMultiplier;
+}
+
 void Game::update(const sf::Time& delta)
 {
     for (auto key : inputs)
@@ -152,6 +167,10 @@ void Game::update(const sf::Time& delta)
 void Game::draw(const sf::Time& delta)
 {
     renderWindow->clear(sf::Color(20, 20, 20));
+    window->clean();
+    window->drawEdgeBorder();
+    std::string fps = zf::floatToString(1/delta.asSeconds(), 2);
+    window->putString(1, 1, fps);
     window->draw(*renderWindow);
     renderWindow->display();
 }

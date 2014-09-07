@@ -31,10 +31,13 @@ public:
     void run();
 
     const sf::Vector2i& getScreenSize() const;
+    const sf::Vector2i& getCoreTermSize() const;
+    const sf::Vector2i& getCoreCellSize() const;
+    int getScreenSizeMultiplier() const;
 private:
     sf::Vector2i screenSize;
     sf::Vector2i coreCellSize;
-    sf::Vector2i termSize;
+    sf::Vector2i coreTermSize;
     int screenMultiplier;
     int framerate;
 //////////////////// Assets ////////////////////

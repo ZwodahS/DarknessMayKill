@@ -228,6 +228,7 @@ namespace zf
          * @return sf::Vector2i, number of columns in the x value, number of rows in the y value.
          */
         const sf::Vector2i& getWindowSize() const;
+        sf::IntRect getRenderSize() const;
         /**
          * Check if this position is in range of the window.
          * @return true if the position is in the window.
@@ -290,6 +291,22 @@ namespace zf
     //////////////////// Draw methods ////////////////////
     public:    
         /**
+         * Clear all sprites in the window.
+         */
+        TiledWindow& clean();
+        TiledWindow& clean(int x, int y);
+        TiledWindow& clean(const sf::Vector2i& cell);
+        TiledWindow& clean(int x, int y, int width, int height);
+        TiledWindow& clean(const sf::IntRect& region);
+        /**
+         * Filling cells with a color
+         */
+        TiledWindow& fill(const sf::Color& color = sf::Color(20, 20, 20));
+        TiledWindow& fill(int x, int y, const sf::Color& color = sf::Color(20, 20, 20));
+        TiledWindow& fill(const sf::Vector2i& cell, const sf::Color& color = sf::Color(20, 20, 20));
+        TiledWindow& fill(int x, int y, int width, int height, const sf::Color& color = sf::Color(20, 20, 20));
+        TiledWindow& fill(const sf::IntRect& bound, const sf::Color& color = sf::Color(20, 20, 20));
+        /**
          * Draw all stuffs onto the renderwindow.
          */ 
         TiledWindow& draw(sf::RenderWindow& window);
@@ -300,6 +317,8 @@ namespace zf
         //////////////////// Sprite drawing
         TiledWindow& putSprite(const sf::Sprite& sprite);
         TiledWindow& putSprite(int x, int y, const sf::Sprite& sprite);
+        TiledWindow& putSprite(const sf::IntRect& bound, const sf::Sprite& sprite);
+        TiledWindow& putSprite(int x, int y, int width, int height, const sf::Sprite& sprite);
         //////////////////// Single char drawing
         TiledWindow& putChar(char c, const sf::Color& color = sf::Color::White);
         TiledWindow& putChar(int x, int y, char c, const sf::Color& color = sf::Color::White);
@@ -309,6 +328,7 @@ namespace zf
         //////////////////// Box drawing.
         void drawCenterBox(const sf::IntRect& bound, const sf::Color& color = sf::Color::White);
         void drawEdgeBox(const sf::IntRect& bound, const sf::Color& color = sf::Color::White);
+        //////////////////// filling.
     };
 }
 #endif

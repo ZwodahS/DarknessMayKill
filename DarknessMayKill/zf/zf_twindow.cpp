@@ -262,6 +262,16 @@ namespace zf
         return *this;
     }
 
+    const sf::Vector2i& TiledWindow::getWindowSize() const
+    {
+        return windowSize;
+    }
+    
+    sf::IntRect TiledWindow::getRenderSize() const
+    {
+        return sf::IntRect(windowPosition.x, windowPosition.y, windowSize.x * cellSize, windowSize.y * cellSize);
+    }
+
     bool TiledWindow::inRange(int x, int y) const
     {
         bool temp = x >= 0 && y >= 0 && x < windowSize.x && y < windowSize.y;
@@ -321,6 +331,73 @@ namespace zf
         return region;
     }
     //////////////////////////////////// TiledWindow drawing methods ////////////////////////////////////
+    TiledWindow& TiledWindow::clean()
+    {
+        return clean(0, 0, windowSize.x, windowSize.y);
+    }
+    
+    TiledWindow& TiledWindow::clean(int x, int y)
+    {
+        cells[x][y]->sprites.clear();
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::clean(const sf::Vector2i& cell)
+    {
+        return clean(cell.x, cell.y);
+    }
+    
+    TiledWindow& TiledWindow::clean(int xStart, int yStart, int width, int height)
+    {
+        for (int x = xStart; x < xStart + width; x++)
+        {
+            for (int y = yStart; y < yStart + height; y++)
+            {
+                clean(x, y);
+            }
+        }
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::clean(const sf::IntRect& region)
+    {
+        return clean(region.left, region.top, region.width, region.height);
+    }
+
+    ////////////////////
+    TiledWindow& TiledWindow::fill(const sf::Color& color)
+    {
+        return fill(0, 0, windowSize.x, windowSize.y, color);
+    }
+    
+    TiledWindow& TiledWindow::fill(int x, int y, const sf::Color& color)
+    {
+        auto sprite = getSpecialChar(TiledWindowFactory::Fill).createSprite();
+        sprite.setColor(color);
+        putSprite(x, y, sprite);
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::fill(int xStart, int yStart, int width, int height, const sf::Color& color)
+    {
+        auto sprite = getSpecialChar(TiledWindowFactory::Fill).createSprite();
+        sprite.setColor(color);
+        for (int x = xStart; x < xStart + width; x++)
+        {
+            for (int y = yStart; y < yStart + height; y++)
+            {
+                putSprite(x, y, sprite);
+            }
+        }
+        return *this;
+    }
+
+    TiledWindow& TiledWindow::fill(const sf::IntRect& bound, const sf::Color& color)
+    {
+        return fill(bound.left, bound.top, bound.width, bound.height, color);
+    }
+    ////////////////////
+
 
     TiledWindow& TiledWindow::draw(sf::RenderWindow& window)
     {
@@ -385,6 +462,23 @@ namespace zf
         if (moveCursor(x, y))
         {
             return putSprite(sprite);
+        }
+        return *this;
+    }
+    
+    TiledWindow& TiledWindow::putSprite(const sf::IntRect& bound, const sf::Sprite& sprite)
+    {
+        return putSprite(bound.left, bound.top, bound.width, bound.height, sprite);
+    }
+
+    TiledWindow& TiledWindow::putSprite(int xStart, int yStart, int width, int height, const sf::Sprite& sprite)
+    {
+        for (int x = xStart; x < xStart + width; x++)
+        {
+            for (int y = yStart; y < yStart + height; y++)
+            {
+                putSprite(x, y, sprite);
+            }
         }
         return *this;
     }

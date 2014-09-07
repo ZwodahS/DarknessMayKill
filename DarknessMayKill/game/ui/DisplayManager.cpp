@@ -24,7 +24,7 @@
 #include "DisplayObject.hpp"
 #include "DisplayData.hpp"
 DisplayManager::DisplayManager(Game& game, zf::TiledWindowFactory& factory)
-    : game(game), windowFactory(factory), displayRegion(displayRegion), debugRegion(debugRegion)
+    : game(game), windowFactory(factory)
 {
 }
 
@@ -86,4 +86,3 @@ bool DisplayManager::empty() const
 {
     return stack.size() == 0;
 }
-

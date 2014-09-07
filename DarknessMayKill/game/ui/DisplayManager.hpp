@@ -28,6 +28,7 @@
 class Game;
 class KeyMap;
 class DisplayObject;
+class DisplayData;
 class DisplayManager
 {
 public:
@@ -37,16 +38,43 @@ public:
     Game& game;
     zf::TiledWindowFactory& windowFactory;
 
-    const std::list<DisplayObject*>& getDisplayObjects() const;
+    /**
+     * Pass this key to be processed by the display objects, in order.
+     * @param key
+     */
     void processKey(int key);
+    /**
+     * Update all display object
+     * @param time passed since last update
+     */
     void updateAll(const sf::Time& delta);
+    /**
+     * Draw all display object
+     * @param time passed since last draw.
+     */
     void drawAll(const sf::Time& delta);
+    /**
+     * Put a display object into the "stack"
+     * @param the state object.
+     */
     void putDisplay(DisplayObject& state);
-
-    const sf::IntRect displayRegion; 
-    const sf::IntRect debugRegion;
+    /**
+     * Make a display object of this type.
+     * @param typestring == to the getType() of display object.
+     * @param data use to init the object.
+     * @return the display object created or nullptr if the display fails to create.
+     */
+    DisplayObject* makeDisplayObject(const std::string& type, const DisplayData& data);
+    /**
+     * Get the list of DisplayObject.
+     * @return const ref list of the internal display stack.
+     */
+    const std::list<DisplayObject*>& getDisplayObjects() const;
+    /**
+     * Check if the display stack is empty.
+     * @return true if empty, false otherwise.
+     */
     bool empty() const;
-
 private:
     std::list<DisplayObject*> stack;
 };

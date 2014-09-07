@@ -28,7 +28,10 @@ class DisplayData
 public:
     DisplayData(const std::string& type);
     virtual ~DisplayData();
-
+    /**
+     * The type of display data.
+     * Useful for type-casting.
+     */
     const std::string type;
 };
 #endif

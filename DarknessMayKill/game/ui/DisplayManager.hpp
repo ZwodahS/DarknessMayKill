@@ -74,7 +74,7 @@ public:
      * Check if the display stack is empty.
      * @return true if empty, false otherwise.
      */
-    bool empty() const;
+    bool isEmpty() const;
 private:
     std::list<DisplayObject*> stack;
 };

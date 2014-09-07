@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "ui/RootObject.hpp"
+#include "c_colors.hpp"
 Game::Game()
     : renderWindow(nullptr), tw_factory(nullptr), framerate(30)
 {
@@ -31,9 +32,8 @@ void Game::init()
 void Game::initUI()
 {
     coreTermSize = sf::Vector2i(51, 51);
-    coreCellSize = sf::Vector2i(8, 8);
-    screenMultiplier = 2;
-    screenSize = sf::Vector2i(screenMultiplier * coreTermSize.x * coreCellSize.x, screenMultiplier * coreTermSize.y * coreCellSize.y);
+    coreCellSize = 16;
+    screenSize = sf::Vector2i(coreTermSize.x * coreCellSize, coreTermSize.y * coreCellSize);
 
     renderWindow = new sf::RenderWindow(sf::VideoMode(screenSize.x, screenSize.y), Title);
     renderWindow->setFramerateLimit(framerate);
@@ -59,6 +59,14 @@ void Game::initKeys()
     keyMap.addMapping(KeyMap::Key_Right, Action::G_Right);
     keyMap.addMapping(KeyMap::Key_Up, Action::G_Up);
     keyMap.addMapping(KeyMap::Key_Down, Action::G_Down);
+
+    keyMap.addMapping('h', Action::G_Left);
+    keyMap.addMapping('l', Action::G_Right);
+    keyMap.addMapping('k', Action::G_Up);
+    keyMap.addMapping('j', Action::G_Down);
+
+    keyMap.addMapping(' ', Action::G_Select);
+    keyMap.addMapping(KeyMap::Key_Escape, Action::G_Cancel);
 }
 
 void Game::run()
@@ -73,7 +81,7 @@ void Game::run()
     }
     displayManager->putDisplay(*object);
 
-    while (!quit && renderWindow->isOpen())
+    while (!quit && renderWindow->isOpen() && !displayManager->isEmpty())
     {
         sf::Time delta = clock.restart();
         sf::Event event;
@@ -135,14 +143,9 @@ const sf::Vector2i& Game::getCoreTermSize() const
     return coreTermSize;
 }
 
-const sf::Vector2i& Game::getCoreCellSize() const
+int Game::getCoreCellSize() const
 {
     return coreCellSize;
-}
-
-int Game::getScreenSizeMultiplier() const
-{
-    return screenMultiplier;
 }
 
 void Game::update(const sf::Time& delta)
@@ -157,7 +160,7 @@ void Game::update(const sf::Time& delta)
 
 void Game::draw(const sf::Time& delta)
 {
-    renderWindow->clear(sf::Color(20, 20, 20));
+    renderWindow->clear(colors::General_ClearColor);
     displayManager->drawAll(*renderWindow, delta);
     renderWindow->display();
 }

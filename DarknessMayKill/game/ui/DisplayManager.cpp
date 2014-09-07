@@ -24,6 +24,7 @@
 #include "DisplayObject.hpp"
 #include "DisplayData.hpp"
 #include "RootObject.hpp"
+#include "MainScreen.hpp"
 DisplayManager::DisplayManager(Game& game, zf::TiledWindowFactory& factory)
     : game(game), windowFactory(factory)
 {
@@ -83,22 +84,27 @@ void DisplayManager::putDisplay(DisplayObject& object)
     stack.push_back(&object);
 }
 
-bool DisplayManager::empty() const
+bool DisplayManager::isEmpty() const
 {
     return stack.size() == 0;
 }
 
 DisplayObject* DisplayManager::makeDisplayObject(const std::string& type, DisplayData* data)
 {
+    DisplayObject* object = nullptr;
     if (type == RootObject::Type)
     {
-        auto object = new RootObject(*this);
-        if (!object->init(data))
-        {
-            delete object;
-            return nullptr;
-        }
-        return object;
+        object = new RootObject(*this);
     }
-    return nullptr;
+    else if (type == MainScreen::Type)
+    {
+        object = new MainScreen(*this);
+    }
+
+    if (object && !object->init(data))
+    {
+        delete object;
+        return nullptr;
+    }
+    return object;
 }

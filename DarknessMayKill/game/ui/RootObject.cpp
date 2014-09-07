@@ -24,6 +24,7 @@
 
 #include "RootObject.hpp"
 #include "DisplayManager.hpp"
+#include "MainScreen.hpp"
 #include "../Game.hpp"
 #include <iostream>
 const std::string RootObject::Type = "Root";
@@ -43,9 +44,7 @@ bool RootObject::init(DisplayData* data)
 {
     #ifndef NODEBUG
     fps = manager.windowFactory.newWindow(sf::Vector2i(20, 1), 8);
-    sf::FloatRect rect = fps->getRenderSize();
-    zf::alignRect(rect, zf::AlignmentX::Left, zf::AlignmentY::Bottom, sf::Vector2f(0, manager.game.getScreenSize().y));
-    fps->setWindowPosition(rect.left, rect.top);
+    fps->alignWindow(zf::AlignmentX::Left, zf::AlignmentY::Bottom, sf::Vector2f(0, manager.game.getScreenSize().y));
     #endif
     return true;
 }
@@ -66,14 +65,29 @@ bool RootObject::processKey(int key)
 
 void RootObject::childReturned(DisplayObject* child, DisplayData* data)
 {
+    if (currentChild == child)
+    {
+        if (child->getType() == MainScreen::Type)
+        {
+            auto outdata = static_cast<MainScreen::OutData*>(data);
+            if (outdata->choice == MainScreen::Choice::NewGame)
+            {
+            }
+            else if (outdata->choice == MainScreen::Choice::Exit)
+            {
+                done = true;
+            }
+        }
+        currentChild = nullptr;
+    }
 }
 
 void RootObject::update(const sf::Time& delta)
 {
     if (!currentChild)
     {
-        // currentChild = manager.makeMainScreen();
-        // manager.putDisplay(*currentChild);
+        currentChild = manager.makeDisplayObject(MainScreen::Type, nullptr);
+        manager.putDisplay(*currentChild);
     }    
 }
 
